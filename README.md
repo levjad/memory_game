@@ -1,5 +1,5 @@
 # memory_game
-Simple Memory Game using Vanilla JavaScript
+Simple Memory Game using Vanilla JavaScript. Demo: https://levjad.github.io/memory_game/
 
 ## Getting started
 
