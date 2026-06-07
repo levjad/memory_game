@@ -1,13 +1,13 @@
 class MemoryGame {
   constructor(containerSelector) {
     this.container = document.querySelector(containerSelector);
+    if (!this.container) return;
+
     this.cards = Array.from(this.container.querySelectorAll('.memory-card'));
 
-    // Konfiguration
     this.FLIP_DURATION = 1000;
     this.RESET_DURATION = 2000;
 
-    // State
     this.hasFlippedCard = false;
     this.lockBoard = false;
     this.firstCard = null;
@@ -25,7 +25,7 @@ class MemoryGame {
   shuffle() {
     for (let i = this.cards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      this.container.appendChild(this.cards[j]); // Verschiebt das Element im DOM
+      this.container.appendChild(this.cards[j]);
     }
   }
 
@@ -49,8 +49,11 @@ class MemoryGame {
   }
 
   checkForMatch() {
-    const isMatch = this.firstCard.dataset.card === this.secondCard.dataset.card;
-    isMatch ? this.disableCards() : this.unflipCards();
+    if (this.firstCard.dataset.card === this.secondCard.dataset.card) {
+      this.disableCards();
+    } else {
+      this.unflipCards();
+    }
   }
 
   disableCards() {
@@ -80,16 +83,18 @@ class MemoryGame {
   }
 
   resetGame() {
+    this.lockBoard = true;
     this.unmatchedCount = this.cards.length;
+
     this.cards.forEach(card => card.classList.remove('flip'));
 
     setTimeout(() => {
       this.shuffle();
       this.resetRound();
-    }, 500);
+    }, this.FLIP_DURATION);
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  new MemoryGame('.memory-game');
+  new MemoryGame('.memory-board');
 });
